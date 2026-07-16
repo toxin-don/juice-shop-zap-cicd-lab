@@ -26,6 +26,6 @@ jobs:
         with:
           target: "http://localhost:3000"
           rules_file_name: ".zap/rules.tsv"
-          allow_issue_writing: false
+          allow_issue_writing: true
           fail_action: true
           artifact_name: "zap_scan_report"
