@@ -1,0 +1,17 @@
+services:
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    ports:
+      - "3000:3000"
+
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    depends_on:
+      - juice-shop
+    volumes:
+      - ./zap-reports:/zap/wrk:rw
+      - ./.zap/rules.tsv:/zap/rules.tsv:ro
+    # 実行例:
+    #   docker compose run --rm zap zap-baseline.py -t http://juice-shop:3000 \
+    #     -c /zap/rules.tsv -r /zap/wrk/report.html -J /zap/wrk/report.json -w /zap/wrk/report.md

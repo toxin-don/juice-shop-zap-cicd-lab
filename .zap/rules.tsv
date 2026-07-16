@@ -1,0 +1,5 @@
+# ZAP scanning rules
+# フォーマット: ルールID<TAB>アクション(IGNORE|INFO|WARN|FAIL)<TAB>URL(任意・空欄可)<TAB>説明(任意)
+#
+# 例（学習用・実際に確認しながら調整する）:
+# 10021	IGNORE		X-Content-Type-Options ヘッダ欠如は今回のラボでは対象外
