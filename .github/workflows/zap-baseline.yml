@@ -27,5 +27,5 @@ jobs:
           target: "http://localhost:3000"
           rules_file_name: ".zap/rules.tsv"
           allow_issue_writing: false
-          # fail_action: true   # 有効化するとCIをゲートにできる（まずはfalseで挙動確認）
+          fail_action: true
           artifact_name: "zap_scan_report"
