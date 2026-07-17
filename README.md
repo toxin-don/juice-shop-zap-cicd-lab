@@ -51,9 +51,15 @@ echo $?
 
 [Issue #4](https://github.com/toxin-don/juice-shop-zap-cicd-lab/issues/4)。AWSアカウントがプロダクトごとに分離された事業会社で、各パイプラインにスキャナを入れ込むメリット/デメリットの検証が目的。**未実行**（レビュー後にPRを起こす）。
 
-### 番外編(計画): apple/containerへの置き換え
+### 番外編: apple/containerへの置き換え調査
 
-[Issue #5](https://github.com/toxin-don/juice-shop-zap-cicd-lab/issues/5)。DockerからApple公式の[container](https://github.com/apple/container) CLIへの置き換え調査。composeに相当する機能が無いため、ZAPとJuice Shop間のネットワーキングを個別に組む必要がある。**準備中**。
+[Issue #5](https://github.com/toxin-don/juice-shop-zap-cicd-lab/issues/5)。Phase 1のDocker DesktopをApple公式の[container](https://github.com/apple/container) CLIに置き換えられるか調査した。**結論: Juice Shop + ZAPの組み合わせは動作する。ただしcomposeの代替には自動化上の注意点がある**（詳細はIssueのコメント参照）。
+
+学習ポイント:
+- インストールは `brew install container` だとソースビルドになりXcode.app本体が要求され失敗する。GitHub Releasesの**署名済みpkgインストーラ**（`container-X.X.X-installer-signed.pkg`）を落として `sudo installer -pkg <pkgファイル> -target /` で入れるのが正解
+- 初回起動は `container system start --enable-kernel-install`。このフラグが無いとkernelインストールの対話プロンプトで止まる
+- composeに相当する機能は無いが、`container run -d --name juice-shop-native -p 3001:3000 bkimminich/juice-shop` でDocker Hubのイメージがそのまま起動できた（OCI互換）。`container list` で各コンテナに個別割当されるIPアドレス（例: `192.168.64.3/24`）を直指定すればZAP→Juice Shop間の疎通も可能で、実際に `FAIL-NEW:0, WARN-NEW:8, PASS:59` とDocker環境と同じ検出結果を確認した
+- **重要な制約: コンテナをstop→rm→runで再作成するとIPアドレスが毎回変わる**（`.3`→`.5`→`.6`と変化することを実証済み）。`container system dns create`（ローカルDNS）や`container network create`（名前付きネットワーク）でcompose相当の名前解決を試みたが、今回の検証範囲ではいずれも機能せず未解決。自動化するなら毎回`container list`/`container inspect`で最新IPを問い合わせるステップが必須（IPハードコードは危険 — コンテナ再作成で接続先が変わる、最悪別コンテナが同IPを引き継ぎ誤爆する可能性がある）
 
 ## 参考
 
