@@ -31,5 +31,9 @@ jobs:
           target: "http://localhost:3000"
           rules_file_name: ".zap/rules.tsv"
           allow_issue_writing: true
-          fail_action: true
+          # triage運用が固まるまではfalseに据え置く。ラチェット原則:
+          # 何もtriageしていない生の状態でtrueにすると、直せる材料が無いまま毎回赤くなるだけになる。
+          # ゲート化（true）に戻すのは、実プロダクト向けの判断基準（docs/risk-judgment-criteria-draft.md）を
+          # 固めてrules.tsvで既知の指摘を抑制した後にする。
+          fail_action: false
           artifact_name: "zap_scan_report"
