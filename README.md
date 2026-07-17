@@ -33,6 +33,9 @@ open zap-reports/report.html
 
 # exit codeを確認（0=クリーン, 1=FAIL, 2=WARNのみ, 3=実行失敗）
 echo $?
+
+# report.jsonを開発者・PdMが読める形式のMarkdownに整形（severityの高い順、影響箇所URL全件、対応方法つき）
+python3 scripts/format_report.py > zap-reports/report-formatted.md
 ```
 
 `.zap/rules.tsv` でルールごとに IGNORE / WARN / FAIL を上書きできる（フォーマット: `ルールID\tアクション\tURL(任意)\t説明`）。
