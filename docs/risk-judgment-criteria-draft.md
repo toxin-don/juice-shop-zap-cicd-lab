@@ -97,5 +97,5 @@ CSP（Content-Security-Policy）ヘッダーが設定されていない。CSPは
 
 ## 次のアクション（叩き台）
 
-- [ ] `report.json` を読んで上記Afterフォーマットで整形するスクリプト（Issue自動作成 or PRコメント）を作る
+- [x] `report.json` を読んで上記Afterフォーマットで整形するスクリプト（Issue自動作成 or PRコメント）を作る → `scripts/format_report.py`（Issue #11）
 - [ ] 4つの判断軸を、実際のプロダクト特性に合わせてGA（または任意の事業会社）向けに再定義する ← **ここは本人が決める領域**

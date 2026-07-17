@@ -42,10 +42,10 @@ python3 scripts/format_report.py > zap-reports/report-formatted.md
 
 ### Phase 2: GitHub Actions
 
-`.github/workflows/zap-baseline.yml` — push / 手動実行で Juice Shop を起動し ZAP baseline scan を実行する。現状の設定: `allow_issue_writing: true` / `fail_action: true`。
+`.github/workflows/zap-baseline.yml` — push / 手動実行で Juice Shop を起動し ZAP baseline scan を実行する。現状の設定: `allow_issue_writing: true` / `fail_action: false`。
 
 学習ポイント:
-- `fail_action` はデフォルト `false`。指摘があってもチェックは緑のまま通る — 明示的に `true` にしないとCIゲートにならない。**ただし何も triage していない生の状態でいきなり true にすると、直せる材料がないまま常に赤くなるだけになる** — 実際にtrueへ切り替えるのは、findings をtriageして`rules.tsv`で判断済みのものを抑制した後が望ましい（ラチェット原則）
+- `fail_action` はデフォルト `false`。指摘があってもチェックは緑のまま通る — 明示的に `true` にしないとCIゲートにならない。**ただし何も triage していない生の状態でいきなり true にすると、直せる材料がないまま常に赤くなるだけになる** ため、本リポジトリでは現状 `false` に据え置いている。実際にtrueへ切り替えるのは、findings をtriageして`rules.tsv`で判断済みのものを抑制した後（ラチェット原則）
 - `allow_issue_writing: true` にすると `GITHUB_TOKEN` に `issues: write` 権限が必要（デフォルトでは付与されない）。**明示的な `permissions:` ブロックが無いと403で失敗する**（Issue #8で発覚。GHAS/CodeQLが `actions/missing-workflow-permissions` として事前警告していた）
 - `action-baseline` が自動生成するIssueは、ルールID・URL一覧のみでseverity・対応方法が出ない固定テンプレート。開発者・PdMが読める形式への再設計案は [`docs/risk-judgment-criteria-draft.md`](docs/risk-judgment-criteria-draft.md)（Issue #11・#13で実例あり）
 - レポートは artifact として自動アップロードされる（Actions タブ→該当run→Artifacts。**ダウンロードは常にzip形式**、GitHub側の固定仕様）
